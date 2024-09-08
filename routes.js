@@ -266,6 +266,27 @@ router.get('/scholarships', async (req, res) => {
     }
 });
 
+// READ a scholarship
+router.get('/scholarships/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const Scholarship = await pool.query(
+            'SELECT * FROM scholarships WHERE id = $1;',
+            [id]
+        );
+
+        if (Scholarship.rows.length === 0) {
+            return res.status(404).json({ error: 'Scholarship not found' });
+        }
+
+        res.json(Scholarship.rows[0]);
+    } catch (error) {
+        console.error('Error reading scholarship', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // UPDATE a scholarship
 router.put('/scholarships/:id', async (req, res) => {
     try {
