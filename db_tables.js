@@ -55,9 +55,9 @@ async function createScholarshipsTable() {
         await query(`
             CREATE TABLE IF NOT EXISTS scholarships (
                 id SERIAL PRIMARY KEY,
-                martyr_id INT REFERENCES martyrs(id) ON DELETE CASCADE,
-                donor_id INT REFERENCES donors(id) ON DELETE CASCADE,
-                student_id INT REFERENCES students(id) ON DELETE CASCADE,
+                martyr_id INT REFERENCES martyrs(id) ON DELETE SET NULL,
+                donor_id INT REFERENCES donors(id) ON DELETE SET NULL,
+                student_id INT REFERENCES students(id) ON DELETE SET NULL,
                 status VARCHAR(50),
                 monthly_amount NUMERIC(10, 2)
             );
@@ -73,9 +73,12 @@ async function createDisbursementsTable(){
         await query(
             `CREATE TABLE IF NOT EXISTS disbursements (
                 id SERIAL PRIMARY KEY,
-                scholarship_id INT REFERENCES scholarships(id) ON DELETE CASCADE,
+                scholarship_id INT REFERENCES scholarships(id) ON DELETE SET NULL,
+                donor_id INT REFERENCES donors(id) ON DELETE SET NULL,
+                student_id INT REFERENCES students(id) ON DELETE SET NULL,
                 date VARCHAR(20),
-                remark VARCHAR(255)
+                amount NUMERIC,
+                remark VARCHAR(100)
             );`
         );
         console.log('disbursements table created successfully');
@@ -87,7 +90,7 @@ async function createDisbursementsTable(){
 async function miscFunction() {
     try {
         await query(
-            'ALTER TABLE donors ALTER COLUMN donor_email DROP NOT NULL;'
+            'DROP TABLE scholarships;'
         );
         console.log('Misc query executed successfully');
     } catch (error) {
@@ -101,5 +104,5 @@ async function miscFunction() {
 // createStudentsTable();
 // createDonorsTable();
 // createScholarshipsTable();
-// createDisbursementsTable();
+createDisbursementsTable();
 // miscFunction();
