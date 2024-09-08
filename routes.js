@@ -337,11 +337,11 @@ router.delete('/scholarships/:id', async (req, res) => {
 // CREATE a disbursement
 router.post('/disbursements', async (req, res) => {
     try {
-        const { scholarship_id, date, remark } = req.body;
+        const { scholarship_id, donor_id, student_id, amount, date, remark } = req.body;
 
         const newDisbursement = await pool.query(
-            'INSERT INTO disbursements (scholarship_id, date, remark) VALUES ($1, $2, $3) RETURNING *;',
-            [scholarship_id, date, remark]
+            'INSERT INTO disbursements (scholarship_id, donor_id, student_id, amount, date, remark) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;',
+            [scholarship_id, donor_id, student_id, amount, date, remark]
         );
 
         res.json(newDisbursement.rows[0]);
@@ -387,11 +387,11 @@ router.get('/disbursements/:id', async (req, res) => {
 router.put('/disbursements/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const { scholarship_id, date, remark } = req.body;
+        const { scholarship_id, donor_id, student_id, amount, date, remark } = req.body;
 
         const updatedDisbursement = await pool.query(
-            'UPDATE disbursements SET scholarship_id = $1, date = $2, remark = $3 WHERE id = $4 RETURNING *;',
-            [scholarship_id, date, remark, id]
+            'UPDATE disbursements SET scholarship_id = $1, donor_id2 = $, student_id, amount, date = $2, remark = $3 WHERE id = $4 RETURNING *;',
+            [scholarship_id, donor_id, student_id, amount, date, remark, id]
         );
 
         if (updatedDisbursement.rows.length === 0) {
